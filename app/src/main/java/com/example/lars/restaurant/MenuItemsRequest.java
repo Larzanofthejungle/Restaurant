@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 public class MenuItemsRequest implements Response.Listener<JSONObject>, Response.ErrorListener{
 
+    //initialisation
     Context context;
     Callback callback;
     String menuCategory;
@@ -31,8 +32,8 @@ public class MenuItemsRequest implements Response.Listener<JSONObject>, Response
     }
 
     public void getMenuItems(Callback activity, String category) {
-        Log.d("getCategories", "reached");
-        Log.d("callback", String.valueOf(activity));
+
+        //sends request for getting the menu items
         callback = activity;
         menuCategory = category;
         RequestQueue queue = Volley.newRequestQueue(context);
@@ -47,12 +48,13 @@ public class MenuItemsRequest implements Response.Listener<JSONObject>, Response
 
     public void onResponse(JSONObject response) {
         try {
-            Log.d("restaurantOnResponse", "reached");
+            //retrieves the json request
             String tempName, tempDescription, tempURL;
             int tempPrice;
             JSONArray jsonArray = response.getJSONArray("items");
             ArrayList<MenuItem> data = new ArrayList<>(6);
 
+            //formats the json to an arraylist of MenuItems
             for (int i = 0; i < jsonArray.length(); i++) {
                 if (jsonArray.getJSONObject(i).getString("category").equals(menuCategory)) {
                     tempName = jsonArray.getJSONObject(i).getString("name");
@@ -62,8 +64,6 @@ public class MenuItemsRequest implements Response.Listener<JSONObject>, Response
                     data.add(new MenuItem(tempName, tempDescription, tempURL, menuCategory, tempPrice));
                 }
             }
-            Log.d("restaurantMenuItems", String.valueOf(data));
-            Log.d("restaurantCallback", String.valueOf(callback));
             callback.gotMenuItems(data);
         } catch (JSONException e) {
             e.printStackTrace();

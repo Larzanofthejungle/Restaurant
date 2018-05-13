@@ -17,6 +17,8 @@ public class MenuItemActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_item);
+
+        //gets selected MenuItem and fills the TextViews and ImageView
         Bundle extras = getIntent().getExtras();
         MenuItem menuItem = (MenuItem) extras.getSerializable("menuItem");
         Log.d("resto", String.valueOf(menuItem));

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 public class CategoriesActivity extends AppCompatActivity implements CategoriesRequest.Callback {
 
+    //set context and initialize categories
     Context context = this;
     private ArrayList<String> categories;
 
@@ -27,6 +28,8 @@ public class CategoriesActivity extends AppCompatActivity implements CategoriesR
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categories);
+
+        //request categories
         CategoriesRequest request = new CategoriesRequest(this);
         request.getCategories(this);
     }
@@ -34,6 +37,7 @@ public class CategoriesActivity extends AppCompatActivity implements CategoriesR
     @Override
     public void gotCategories(ArrayList<String> categories) {
 
+        //fill listview with categories and set onclicklistener
         CategoryListAdapter adapter = new CategoryListAdapter(context, R.layout.category_list_item, categories);
         ListView listView = findViewById(R.id.categoryListView);
         listView.setAdapter(adapter);
@@ -45,8 +49,9 @@ public class CategoriesActivity extends AppCompatActivity implements CategoriesR
 
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+            //on click it goes to the MenuActivity with the selected category
             Intent intent = new Intent(CategoriesActivity.this, MenuActivity.class);
-            Log.d("intentExtra", String.valueOf(categories.get(i)));
             intent.putExtra("category", categories.get(i));
             startActivity(intent);
         }
@@ -57,6 +62,7 @@ public class CategoriesActivity extends AppCompatActivity implements CategoriesR
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
+    //adapter for filling the listview with categories
     public class CategoryListAdapter extends ArrayAdapter<String> {
 
         TextView categoryListItemText;

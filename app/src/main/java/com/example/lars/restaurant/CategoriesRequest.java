@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 public class CategoriesRequest implements Response.Listener<JSONObject>, Response.ErrorListener{
 
+    //initialisation
     Context context;
     Callback callback;
 
@@ -30,8 +31,8 @@ public class CategoriesRequest implements Response.Listener<JSONObject>, Respons
     }
 
     public void getCategories(Callback activity) {
-        Log.d("getCategories", "reached");
-        Log.d("callback", String.valueOf(activity));
+
+        //requests jsonobject of categories
         callback = activity;
         RequestQueue queue = Volley.newRequestQueue(context);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest("https://resto.mprog.nl/categories", null, this, this);
@@ -45,15 +46,13 @@ public class CategoriesRequest implements Response.Listener<JSONObject>, Respons
 
     public void onResponse(JSONObject response) {
         try {
-            Log.d("onResponse", "reached");
+
+            //formats json array to an array list of strings
             JSONArray jsonArray = response.getJSONArray("categories");
             ArrayList<String> data = new ArrayList<>(2);
             for (int i = 0; i < jsonArray.length(); i++) {
-                Log.d("json",jsonArray.getString(i));
                 data.add(jsonArray.getString(i));
             }
-            Log.d("categories", String.valueOf(data));
-            Log.d("callback", String.valueOf(callback));
             callback.gotCategories(data);
         } catch (JSONException e) {
             e.printStackTrace();

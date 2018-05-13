@@ -33,6 +33,8 @@ public class MenuActivity extends AppCompatActivity implements MenuItemsRequest.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+
+        //request menu items of selected category
         MenuItemsRequest request = new MenuItemsRequest(this);
         Bundle extras = getIntent().getExtras();
         request.getMenuItems(this, extras.getString("category"));
@@ -40,6 +42,8 @@ public class MenuActivity extends AppCompatActivity implements MenuItemsRequest.
 
     @Override
     public void gotMenuItems(ArrayList<MenuItem> menuItems) {
+
+        //fill listview with menu items and sets on click listener
         MenuItemsListAdapter adapter = new MenuItemsListAdapter(this, R.layout.menu_list_item, menuItems);
         ListView listView = findViewById(R.id.menuListView);
         listView.setAdapter(adapter);
@@ -51,17 +55,19 @@ public class MenuActivity extends AppCompatActivity implements MenuItemsRequest.
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
+
     private class MenuItemClickListener implements AdapterView.OnItemClickListener {
 
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+            //on click it goes to MenuItemActivity with the selected menu item
             Intent intent = new Intent(MenuActivity.this, MenuItemActivity.class);
-            Log.d("resto", String.valueOf(menuItems.get(i)));
             intent.putExtra("menuItem", menuItems.get(i));
             startActivity(intent);
         }
     }
-
+    //adapter for filling the listview with menu items
     public class MenuItemsListAdapter extends ArrayAdapter<MenuItem> {
 
         TextView menuListName, menuListPrice;
@@ -81,8 +87,6 @@ public class MenuActivity extends AppCompatActivity implements MenuItemsRequest.
             menuListName = convertView.findViewById(R.id.menuListName);
             menuListPrice = convertView.findViewById(R.id.menuListPrice);
             menuListImage = convertView.findViewById(R.id.menuListImage);
-            Log.d("restaurantMenuName", String.valueOf(menuItems));
-            Log.d("restaurantMenuName", String.valueOf(menuItems.get(position).getName()));
             menuListName.setText(menuItems.get(position).getName());
             menuListPrice.setText("€ "+ menuItems.get(position).getPrice());
             Picasso.with(getContext()).load(menuItems.get(position).getImageURL()).into(menuListImage);
